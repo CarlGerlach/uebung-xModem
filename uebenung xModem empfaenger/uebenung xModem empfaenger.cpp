@@ -99,10 +99,21 @@ int main()
                 break;
             }
 
+            if (block[0] != SOH)
+            {
+                cout << "Start ist nicht SOH" << endl;
+                com->write(0x015);
+                continue;
+            }
+
+            
+
+
             if (!checkValidBlock(block))
             {
                 cout << "Kein Valider Block, sende NAK" << endl;
                 com->write(0x15);
+                continue,
             }
             else
             {
