@@ -37,7 +37,7 @@ void buildBlock(string& input, int blockNumber, char* block)
 {
     int checkSum = 0;
 
-
+    block[0] = 0x01;
     block[1] = blockNumber;
     block[2] = 255 - blockNumber;
 

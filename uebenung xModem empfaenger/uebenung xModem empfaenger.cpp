@@ -50,15 +50,17 @@ bool checkValidBlock(char* block)
 
     cout << "CheckSum errechnet: " << checkSum << endl;
     cout << "CheckSum empfangen: " << block[blockSize - 1] << endl;
-    if (static_cast<char>(checkSum) != block[blockSize - 1])    //static_cast<int>(block[blockSize])
+    if (static_cast<char>(checkSum) == block[blockSize - 1] && block[0] == 0x01)    //static_cast<int>(block[blockSize])
     { 
-        cout << "check sum ist nicht valide" << endl;
-        Sleep(10000);
-        return false;
+        cout << "CheckSum ist valid" << endl;
+        return true;
+        
     }
 
-    cout << "CheckSum ist valid" << endl;
-    return true;
+
+    cout << "check sum ist nicht valide" << endl;
+    Sleep(10000);
+    return false;
 
 }
 
