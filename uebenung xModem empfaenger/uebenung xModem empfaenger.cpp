@@ -106,6 +106,12 @@ int main()
                 continue;
             }
 
+            if(255 - block[1] == block[2])
+            {
+                cout << "Zähler ist falsch" << endl;
+                com->write(0x15);
+                continue;
+            }
             
 
 
@@ -113,7 +119,7 @@ int main()
             {
                 cout << "Kein Valider Block, sende NAK" << endl;
                 com->write(0x15);
-                continue,
+                continue;
             }
             else
             {

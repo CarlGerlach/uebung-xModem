@@ -33,6 +33,8 @@ char CAN = 0x18; // Cancel (Abbruch der Übertragung)
 const int dataSize = 5;
 const int blockSize = 3 + dataSize + 1;
 
+
+
 void buildBlock(string& input, int blockNumber, char* block)
 {
     int checkSum = 0;
@@ -43,6 +45,8 @@ void buildBlock(string& input, int blockNumber, char* block)
 
     for (int i = 0; i < dataSize; i++) {
         char b;
+
+      
 
         if (i < input.size()) 
         {
@@ -57,6 +61,7 @@ void buildBlock(string& input, int blockNumber, char* block)
 
         }
 
+        
         block[i + 3] = b;
 
 
@@ -74,7 +79,7 @@ int main()
     Serial* com = new Serial("COM1", 9600, 8, ONESTOPBIT, NOPARITY);
     char c = ' ';
 
-    string input = "Hallo Welt!. Das ist ein neuer Test";
+    string input = "Hallo Welt!. Das ist ein neuer Test!";
     
 
 
