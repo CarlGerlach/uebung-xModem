@@ -35,12 +35,11 @@ const int blockSize = 3 + dataSize + 1;
 
 void buildBlock(string& input, int blockNumber, char* block)
 {
-    string dataSet = input.substr();
     int checkSum = 0;
 
 
-    block[2] = blockNumber;
-    block[3] = 255 - blockNumber;
+    block[1] = blockNumber;
+    block[2] = 255 - blockNumber;
 
     for (int i = 0; i < dataSize; i++) {
         char b;
@@ -49,20 +48,24 @@ void buildBlock(string& input, int blockNumber, char* block)
         {
             // Noch Daten im String 
             b = input[i];
+
         }
         else 
         {
             // String ist zu Ende auffüllen mit ETX
             b = 0x03;
+
         }
 
-        block[i] = b;
+        block[i + 3] = b;
 
 
         checkSum += b;
     }
 
-    block[9] = checkSum % 256;
+    block[blockSize - 1] = static_cast<char>(checkSum % 256);
+    cout << "Check Sum bei verpacken: " << checkSum % 256 << endl;
+    cout << "Check Sum bei verpacken: " << static_cast<char>(checkSum % 256) << endl;
 }
 
 
@@ -71,7 +74,7 @@ int main()
     Serial* com = new Serial("COM1", 9600, 8, ONESTOPBIT, NOPARITY);
     char c = ' ';
 
-    string input = "Hallo Welt!";
+    string input = "Hallo Welt!. Das ist ein neuer Test";
     
 
 
@@ -82,7 +85,10 @@ int main()
     }
     else
     {
+        cout << "Warten auf NAK von Empfaenger fuer start" << endl;
+
         c = com->read();
+        
 
 
         if (c != 0x15) 
@@ -98,7 +104,7 @@ int main()
 
 
 
-        int numBlocks = (input.size() + dataSize - 1) / dataSize; //Anzahl der Benötigten Blöcke
+        int numBlocks = (static_cast<int>(input.size()) + dataSize - 1) / dataSize; //Anzahl der Benötigten Blöcke
 
         for (int n = 0; n < numBlocks; n++) {
             // Teilstring herausziehen

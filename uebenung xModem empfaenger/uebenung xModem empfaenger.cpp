@@ -19,6 +19,8 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <windows.h>
+
 using namespace std;
 
 // Übertragungs-Steuerzeichen (für spätere Protokoll-Erweiterungen nützlich)
@@ -41,16 +43,21 @@ bool checkValidBlock(char* block)
 
     for (int i = 0; i < dataSize; i++)
     {
-        checkSum += block[i];
+        checkSum += block[3 + i];
     }
 
     checkSum = checkSum % 256;
 
-    if (checkSum != block[blockSize])
-    {
+    cout << "CheckSum errechnet: " << checkSum << endl;
+    cout << "CheckSum empfangen: " << block[blockSize - 1] << endl;
+    if (static_cast<char>(checkSum) != block[blockSize - 1])    //static_cast<int>(block[blockSize])
+    { 
+        cout << "check sum ist nicht valide" << endl;
+        Sleep(10000);
         return false;
     }
 
+    cout << "CheckSum ist valid" << endl;
     return true;
 
 }
@@ -68,12 +75,13 @@ int main()
 
     if (!com->open())
     {
-        cout << "Fehler beim Öffnen" << endl;
+        cout << "Fehler beim oeffnen" << endl;
         return -1;
     }
     else
     {
-        com->write(0x15);
+        com->write(0x15); 
+        cout << "NAK gesendet" << endl;
 
         while (true)
         {
@@ -99,10 +107,10 @@ int main()
                 cout << "Block richtig empfangen" << endl;
                 cout << "Es wurde: ";
                 com->write(0x06);
-                for (int i = 3; i < dataSize; i++)
+                for (int i = 0; i < dataSize; i++)
                 {
-                    buffer += block[i];
-                    cout << block[i];
+                    buffer += block[3 + i];
+                    cout << block[3 + i];
                 }
 
                 cout << " gesendet" << endl;
